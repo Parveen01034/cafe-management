@@ -1,0 +1,90 @@
+class CafeManagementSystem:
+    def _init_(self):
+        self.menu = {}
+        self.orders = []
+
+    def add_menu_item(self, item_name, price):
+        """Add an item to the menu."""
+        self.menu[item_name] = price
+        print(f"Added {item_name} to the menu at ${price:.2f}")
+
+    def display_menu(self):
+        """Display the menu with items and prices."""
+        if not self.menu:
+            print("Menu is empty.")
+            return
+        print("Cafe Menu:")
+        for item, price in self.menu.items():
+            print(f"{item}: ${price:.2f}")
+
+    def take_order(self):
+        """Take an order from the customer."""
+        if not self.menu:
+            print("Menu is empty. Cannot take orders.")
+            return
+        order = {}
+        print("Enter the items you want to order (type 'done' when finished):")
+        while True:
+            item = input("Item: ").strip()
+            if item.lower() == 'done':
+                break
+            if item in self.menu:
+                quantity = int(input(f"Quantity of {item}: "))
+                if item in order:
+                    order[item] += quantity
+                else:
+                    order[item] = quantity
+            else:
+                print("Item not on the menu.")
+        self.orders.append(order)
+        print("Order added.")
+
+    def calculate_bill(self, order):
+        """Calculate the total bill for a given order."""
+        total = 0
+        for item, quantity in order.items():
+            total += self.menu[item] * quantity
+        return total
+
+    def display_orders(self):
+        """Display all orders and their total costs."""
+        if not self.orders:
+            print("No orders have been placed.")
+            return
+        print("Orders:")
+        for i, order in enumerate(self.orders, 1):
+            print(f"Order {i}:")
+            for item, quantity in order.items():
+                print(f"  {item} x{quantity} = ${self.menu[item] * quantity:.2f}")
+            print(f"  Total: ${self.calculate_bill(order):.2f}")
+
+def main():
+    system = CafeManagementSystem()
+
+    while True:
+        print("\nCafe Management System")
+        print("1. Add menu item")
+        print("2. Display menu")
+        print("3. Take order")
+        print("4. Display orders")
+        print("5. Exit")
+        choice = input("Choose an option: ")
+
+        if choice == '1':
+            item_name = input("Enter item name: ")
+            price = float(input("Enter item price: "))
+            system.add_menu_item(item_name, price)
+        elif choice == '2':
+            system.display_menu()
+        elif choice == '3':
+            system.take_order()
+        elif choice == '4':
+            system.display_orders()
+        elif choice == '5':
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if _name_ == "_main_":
+    main()
